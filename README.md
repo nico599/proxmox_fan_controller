@@ -19,9 +19,9 @@ This approach relies of direct communication with the management interface to se
 
 It relies on the use of ipmitool to interact with the SuperMicro BMC (Baseboard Management Controller)
 
-and luckily I found some people who had already pinpointed the right codes see (here)[https://forums.servethehome.com/index.php?threads/help-quieting-my-supermicro-servers.39031/]
+and luckily I found some people who had already pinpointed the right codes see [here](https://forums.servethehome.com/index.php?threads/help-quieting-my-supermicro-servers.39031)
 
-Heres an example which worked on my system:
+Heres an example of the command which worked on my system:
 
 ```bash
 ipmitool raw 0x30 0x70 0x66 0x01 0x00 0x10
@@ -29,3 +29,10 @@ ipmitool raw 0x30 0x70 0x66 0x01 0x00 0x10
 
 the last digit appears to control the speed of all three fans so `0x10` might be 10%, but one of the Posters suggests `0x08` was 8% and `0x20` was full speed so you'll have to decide for yourselves.
 
+## enable_at_boot
+
+Refer to this document to see how you can ensure the quiet speed is set at boot.
+
+## react_to_temp_change
+
+Refer to this to see how Im ensuring it can speed up if it has to.
