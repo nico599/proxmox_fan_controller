@@ -6,38 +6,7 @@ So we're logging temperatures, which should be reviewed, and we're dynamically a
 
 Create the script `/usr/local/bin/fan-control.sh`:
 
-```bash
-#!/bin/bash
-
-# Define temperature thresholds (you may need to adjust these values)
-TEMP_THRESHOLD_1=40  # Temperature (in C) for low fan speed
-TEMP_THRESHOLD_2=60  # Temperature (in C) for moderate fan speed
-TEMP_THRESHOLD_3=80  # Temperature (in C) for high fan speed
-
-# Get the current CPU temperature using ipmitool
-CPU_TEMP=$(ipmitool sensor | grep "CPU" | grep -oP '(\d+.\d+)' | head -n 1)
-
-# If no CPU temperature is available, exit
-if [ -z "$CPU_TEMP" ]; then
-    echo "Error: Could not read CPU temperature."
-    exit 1
-fi
-
-# Determine fan speed based on temperature
-if (( $(echo "$CPU_TEMP < $TEMP_THRESHOLD_1" | bc -l) )); then
-    FAN_SPEED="0x08"  # Low fan speed
-elif (( $(echo "$CPU_TEMP >= $TEMP_THRESHOLD_1 && $CPU_TEMP < $TEMP_THRESHOLD_2" | bc -l) )); then
-    FAN_SPEED="0x10"  # Medium fan speed
-elif (( $(echo "$CPU_TEMP >= $TEMP_THRESHOLD_2" | bc -l) )); then
-    FAN_SPEED="0x20"  # High fan speed
-fi
-
-# Set the fan speed via ipmitool
-ipmitool raw 0x30 0x70 0x66 0x01 0x00 $FAN_SPEED
-
-# Optionally log the temperature and fan speed to a file
-echo "$(date) - CPU Temp: $CPU_TEMP, Fan Speed: $FAN_SPEED" >> /var/log/fan-control.log
-```
+(for contents see fan_control.sh)
 
 After creating the script, make it executable:
 
@@ -56,6 +25,8 @@ After=multi-user.target
 ExecStart=/usr/local/bin/fan-control.sh
 Type=simple
 Restart=on-failure
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target
@@ -69,8 +40,8 @@ Create a timer file /etc/systemd/system/fan-control.timer:
 Description=Run Fan Control Script Every 30 Seconds
 
 [Timer]
-OnBootSec=5min
-OnUnitActiveSec=30s
+OnBootSec=1min
+OnUnitActiveSec=10s
 Unit=fan-control.service
 
 [Install]
