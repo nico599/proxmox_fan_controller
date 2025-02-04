@@ -1,5 +1,8 @@
 # proxmox_fan_controller
 
+
+![plot](data_analysis/plot.png "Fan Controller Service")
+
 Systems supporting ipmitool can utilize this approach.
 
 This approach has worked for me, and without buying new expensive quiet fans this will make your home-lab server quiet.
@@ -36,3 +39,11 @@ Refer to this document to see how you can ensure the quiet speed is set at boot.
 ## react_to_temp_change
 
 Refer to this to see how Im ensuring it can speed up if it has to.
+
+## Graphing
+
+Theres a very simple graphing library to see how your CPU/fan speeds are going.
+
+see data_analysis/data_analysis.py 
+
+just put your logs into `data.txt` in the same folder or re-point the `input_file` variable.

@@ -1,0 +1,7 @@
+.venv
+plot_high_res.png
+
+.vscode/
+__pycache__/
+
+data.txt
